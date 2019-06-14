@@ -72,6 +72,7 @@ VOLUME /home/superset \
        /var/lib/superset
 WORKDIR /home/superset
 RUN fabmanager create-admin --app superset --username admin --firstname admin --lastname admin --password password --email a@b.com
+RUN pip install sqlalchemy==1.2.18
 RUN superset db upgrade
 RUN superset init
 

@@ -60,15 +60,20 @@ RUN useradd -U -m superset && \
         redis==2.10.5 \
         sqlalchemy-clickhouse==0.1.5.post0 \
         sqlalchemy-redshift==0.7.1 \
+        boto3 \
         werkzeug==0.14.1 && \
     pip install superset==${SUPERSET_VERSION}
 
 # Configure Filesystem
 COPY superset /usr/local/bin
+COPY config/superset_config.py /etc/superset
 VOLUME /home/superset \
        /etc/superset \
        /var/lib/superset
 WORKDIR /home/superset
+RUN fabmanager create-admin --app superset --username admin --firstname admin --lastname admin --password password --email a@b.com
+RUN superset db upgrade
+RUN superset init
 
 # Deploy application
 EXPOSE 8088
